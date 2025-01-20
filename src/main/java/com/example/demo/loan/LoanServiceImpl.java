@@ -2,7 +2,7 @@ package com.example.demo.loan;
 
 import com.example.demo.ErrorType;
 import com.example.demo.db.*;
-import com.example.demo.db.repo.UserRepo;
+import com.example.demo.db.repo.CustomerRepo;
 import com.example.demo.db.repo.LoanInstallmentRepo;
 import com.example.demo.db.repo.LoanRepo;
 import com.example.demo.loan.dto.LoanDTO;
@@ -31,7 +31,7 @@ public class LoanServiceImpl implements LoanService {
     @Autowired
     private LoanInstallmentRepo installmentRepo;
     @Autowired
-    private UserRepo userRepo;
+    private CustomerRepo customerRepo;
 
 
     @Override
@@ -77,14 +77,14 @@ public class LoanServiceImpl implements LoanService {
         LoanResponseDTO responseDto = new LoanResponseDTO();
         responseDto.setRequestDTO(requestDto);
 
-        Optional<User> userOPT = userRepo.findById(requestDto.getCustomerId());
-        User user = userOPT.orElseThrow();
+        Optional<Customer> customerOPT = customerRepo.findById(requestDto.getCustomerId());
+        Customer customer = customerOPT.orElseThrow();
 
         //find total amount with interest
         final Double totalAmount = calculateTotalAmount(requestDto);
 
         //You should check if customer has enough limit to get this new loan
-        if (!checkCustomerCreditLimit(user.getCreditLimit(),user.getUsedCreditLimit(),totalAmount)){
+        if (!checkCustomerCreditLimit(customer.getCreditLimit(),customer.getUsedCreditLimit(),totalAmount)){
             responseDto.setErrorType(ErrorType.NOT_ENOUGH_LIMIT.ordinal());
             responseDto.setIsAccepted(false);
             return responseDto;
@@ -107,12 +107,12 @@ public class LoanServiceImpl implements LoanService {
         }
 
         Loan loan = createLoanEntity(requestDto);
-        loan.setCustomer(user);
+        loan.setCustomer(customer);
         loan = loanRepo.save(loan);
 
-        Double newLimit = user.getUsedCreditLimit() + totalAmount;
-        user.setUsedCreditLimit(newLimit);
-        userRepo.save(user);
+        Double newLimit = customer.getUsedCreditLimit() + totalAmount;
+        customer.setUsedCreditLimit(newLimit);
+        customerRepo.save(customer);
 
         final Double oneInstallmentAmount = totalAmount /  requestDto.getNumberOfInstallment();
         createLoanInstallments(loan, requestDto, oneInstallmentAmount);

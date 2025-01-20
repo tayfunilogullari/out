@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUserByName(String name) {
-        User user = userRepo.getUserByName(name);
+        User user = userRepo.findByUserName(name);
         UserDTO dto = modelMapper.map(user, UserDTO.class);
         return dto;
     }
@@ -56,13 +56,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updateUser(UserDTO userDto, Long userId) {
         User user = userRepo.getReferenceById(userId);
-
-        user.setName(userDto.getName());
-        user.setSurname(userDto.getSurname());
-        user.setCreditLimit(userDto.getCreditLimit());
-        user.setUsedCreditLimit(userDto.getUsedCreditLimit());
-
+        modelMapper.map(userDto, user);
         user = userRepo.save(user);
+
         userDto = modelMapper.map(user, UserDTO.class);
 
         return userDto;

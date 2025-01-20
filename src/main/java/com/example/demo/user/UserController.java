@@ -1,5 +1,6 @@
 package com.example.demo.user;
 
+import com.example.demo.user.dto.CustomerDTO;
 import com.example.demo.user.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +14,13 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final CustomerService customerService;
 
     @GetMapping (value = "/hello")
     @ResponseBody
     public String healthCheck() {
         return "Hello";
     }
-
 
     @GetMapping (value = "/kullanici/{id}")
     @ResponseBody
@@ -58,4 +59,36 @@ public class UserController {
         userService.deleteUser(userId);
         return "Deleted Successfully";
     }
+
+    @GetMapping (value = "/customers")
+    @ResponseBody
+    public List<CustomerDTO> getCustomers() {
+        return customerService.getCustomerList();
+    }
+
+    @GetMapping (value = "/customer/{id}")
+    @ResponseBody
+    public CustomerDTO getCustomerById(@PathVariable("id") Long customerId) {
+        return customerService.getCustomerById(customerId);
+    }
+
+    @GetMapping (value = "/customer_by_user/{id}")
+    @ResponseBody
+    public CustomerDTO getCustomerByUserId(@PathVariable("id") Long userId) {
+        return customerService.getCustomerByUserId(userId);
+    }
+
+    @PostMapping("/add_customer")
+    public boolean createCustomer(@RequestBody CustomerDTO customerDTO)
+    {
+        return customerService.createCustomer(customerDTO);
+    }
+
+    @PutMapping("/update_customer")
+    public boolean updateCustomer(@RequestBody CustomerDTO customerDTO)
+    {
+        return customerService.updateCustomer(customerDTO);
+    }
+
+
 }

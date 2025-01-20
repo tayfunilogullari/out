@@ -1,10 +1,12 @@
 package com.example.demo.db;
 
+import com.example.demo.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "USER")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -15,15 +17,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "NAME")
-    private String name;
+    @Column(name = "USER_NAME", unique = true, nullable = false)
+    private String userName;
 
-    @Column(name = "SURNAME")
-    private String surname;
+    @Column(name = "PASSWORD", nullable = false)
+    @JsonIgnore
+    private String password;
 
-    @Column(name = "CREDIT_LIMIT")
-    private Double creditLimit;
-
-    @Column(name = "USED_CREDIT_LIMIT")
-    private Double usedCreditLimit;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ROLE", nullable = false)
+    private UserRole role;
 }

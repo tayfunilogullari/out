@@ -17,8 +17,8 @@ class DemoApplicationTests {
 		UserDTO dto = new UserDTO();
 		dto.setName("Tayfun");
 		dto.setSurname("Ilo");
-		dto.setCreditLimit(200000L);
-		dto.setUsedCreditLimit(100000L);
+		dto.setCreditLimit(200000.0);
+		dto.setUsedCreditLimit(100000.0);
 		user.saveUser(dto);
 	}
 

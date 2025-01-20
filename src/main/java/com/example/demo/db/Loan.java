@@ -20,7 +20,7 @@ public class Loan {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="CUSTOMER_ID", nullable=false, referencedColumnName = "id")
-    private User customer;
+    private Customer customer;
 
     @Column(name = "LOAN_AMOUNT")
     private Double loanAmount;

@@ -1,7 +1,7 @@
 package com.example.demo.payment;
 
 import com.example.demo.db.*;
-import com.example.demo.db.repo.UserRepo;
+import com.example.demo.db.repo.CustomerRepo;
 import com.example.demo.db.repo.LoanInstallmentRepo;
 import com.example.demo.db.repo.LoanRepo;
 import com.example.demo.payment.dto.PaymentRequestDTO;
@@ -27,7 +27,7 @@ public class PaymentServiceImpl implements PaymentService {
     private LoanInstallmentRepo installmentRepo;
 
     @Autowired
-    private UserRepo userRepo;
+    private CustomerRepo customerRepo;
 
     @Override
     public PaymentResponseDTO payLoan(PaymentRequestDTO requestDto) {
@@ -86,9 +86,9 @@ public class PaymentServiceImpl implements PaymentService {
             installmentRepo.saveAll(paidInstallments);
 
             //update user used credit limit
-            User user = loan.getCustomer();
-            user.setUsedCreditLimit(user.getUsedCreditLimit() - paidLimit);
-            userRepo.save(user);
+            Customer customer = loan.getCustomer();
+            customer.setUsedCreditLimit(customer.getUsedCreditLimit() - paidLimit);
+            customerRepo.save(customer);
         }
 
         /*

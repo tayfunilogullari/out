@@ -7,6 +7,7 @@ import com.example.demo.loan.dto.LoanResponseDTO;
 import com.example.demo.payment.dto.PaymentRequestDTO;
 import com.example.demo.payment.dto.PaymentResponseDTO;
 import com.example.demo.payment.PaymentService;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
